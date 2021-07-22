@@ -22,7 +22,7 @@ export class MessageComponent {
   @Input() control: FormControl = new FormControl();
   @Input() text: string = '';
   temErro(): boolean {
-    return this.control.hasError(this.error) && this.control.dirty;
+    return this.control ? this.control.hasError(this.error) && this.control.dirty : true;
   }
 
 }

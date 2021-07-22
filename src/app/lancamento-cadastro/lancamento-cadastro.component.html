@@ -1,5 +1,5 @@
 <div class="container">
-  <form autocomplete="false">
+  <form #f="ngForm" autocomplete="off">
 
     <div class="p-grid">
       <div class="p-col-12">
@@ -7,27 +7,31 @@
       </div>
 
       <div class="p-col-12">
-      <p-selectButton [options]="tipos" #tipo></p-selectButton>
+        <p-selectButton name="tipo" [options]="tipos" ngModel #tipo></p-selectButton>
     </div>
 
       <div class="p-col-6 p-md-3 p-fluid">
         <label>Vencimento</label>
-        <p-calendar dateFormat="dd/mm/yy"></p-calendar>
+        <p-calendar name="vencimento" dateFormat="dd/mm/yy"
+          [inline]="false" [readonlyInput]="false" [showIcon]="false"
+          ngModel #vencimento="ngModel"></p-calendar>
+
+        <app-message [control]="vencimento.control" error="required"
+          text="Informe uma data de vencimento"></app-message>
       </div>
 
       <div class="p-col-6 p-md-3 p-fluid">
         <label>{{ tipo.value === 'RECEITA' ? 'Recebimento' : 'Pagamento'}}</label>
-        <p-calendar
-          dateFormat="dd/mm/yy"></p-calendar>
+        <p-calendar dateFormat="dd/mm/yy"></p-calendar>
       </div>
 
       <div class="p-col-12 p-md-9 p-fluid">
         <label>Descrição {{ descricao.errors | json }}</label>
         <input pInputText type="text" name="descricao" ngModel #descricao="ngModel" required minlength="5">
 
-        <app-message [control]="descricao" error="required"
+        <app-message [control]="descricao.control" error="required"
           text="Informe uma descrição"></app-message>
-          <app-message [control]="descricao" error="minlength"
+          <app-message [control]="descricao.control" error="minlength"
           text="Mínimo de {{ descricao.errors?.minlength?.requiredLength }} caracteres"></app-message>
       </div>
 
@@ -35,30 +39,27 @@
         <label>Valor</label>
         <input pInputText type="text" placeholder="0,00" name="valor" currencyMask
           [options]="{ prefix: '', thousands: '.', decimal: ',', allowNegative: false }"
-          ngModel>
+          ngModel required>
       </div>
 
       <div class="p-col-12 p-md-6 p-fluid">
         <label>Categoria</label>
-        <p-dropdown [options]="categorias" placeholder="Selecione" ></p-dropdown>
+        <p-dropdown [options]="categorias" placeholder="Selecione" Validators.required></p-dropdown>
       </div>
+
       <div class="p-col-12 p-md-6 p-fluid">
         <label>Pessoa</label>
-        <p-dropdown [options]="pessoas" placeholder="Selecione" [filter]="true" ></p-dropdown>
+        <p-dropdown [options]="pessoas" placeholder="Selecione" [filter]="true" Validators.required></p-dropdown>
       </div>
+
       <div class="p-col-12 p-fluid">
         <label>Observação</label>
         <textarea pInputTextarea rows="3"></textarea>
       </div>
 
       <div class="p-col-12">
-        <button pButton type="submit" label="Salvar"></button>
-        <button
-          pButton
-          type="button"
-          label="Novo"
-          class="p-button-info"
-        ></button>
+        <button pButton type="submit" label="Salvar" [disabled]="f.invalid"></button>
+        <button pButton type="button" label="Novo" class="p-button-info"></button>
         <a href="javascript:;">Voltar para a pesquisa</a>
       </div>
     </div>
